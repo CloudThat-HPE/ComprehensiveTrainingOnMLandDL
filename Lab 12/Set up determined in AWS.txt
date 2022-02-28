@@ -1,0 +1,21 @@
+Steps for setting up determined cluster in AWS
+
+1. Create a EC2 instance (e.g. t2.medium) in us-west-2 region, 
+with IAM Roles (Administrator, CloudFormation, Network, Database) along with the
+key-pair.
+
+2. sudo apt-get update
+
+3. sudo apt install python3-pip
+
+4. pip install determined
+
+5. det deploy aws up --cluster-id cluster1 --keypair determined-key --region us-west-2 --master-instance-type t2.medium --aux-agent-instance-type t2.medium --compute-agent-instance-type t2.medium --max-dynamic-agents 2
+
+6. git clone https://github.com/determined-ai/determined
+
+7. cd determined/examples/computer_vision/cifar10_pytorch
+
+8. det experiment create distributed.yaml .
+
+
