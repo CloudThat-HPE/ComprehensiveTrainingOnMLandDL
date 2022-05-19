@@ -1,0 +1,122 @@
+ssh -i .\amitspark.pem ubuntu@18.207.246.238
+sudo apt update
+sudo apt install software-properties-common
+
+sudo apt install python3.8
+python3.8 --version
+
+sudo apt install pip -y
+pip  install matplotlib
+pip install virtualenv
+
+sudo apt install openjdk-8-jdk -y
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+
+wget https://downloads.apache.org/spark/spark-3.1.2/spark-3.1.2-bin-hadoop3.2.tgz
+sudo mkdir /opt/spark
+sudo tar -xf spark*.tgz -C /opt/spark --strip-component 1
+sudo chmod -R 777 /opt/spark
+
+echo "export SPARK_HOME=/opt/spark" >> ~/.bashrc
+echo "export PATH=$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin" >> ~/.bashrc
+echo "export PYSPARK_PYTHON=/usr/bin/python3" >> ~/.bashrc
+
+source ~/.bashrc
+
+sudo apt install python3-pip python3-dev
+sudo -H pip3 install --upgrade pip
+sudo -H pip3 install virtualenv
+
+mkdir ~/my_ML_Projects
+cd ~/my_ML_Projects
+virtualenv ml_project_env
+source ml_project_env/bin/activate
+
+pip install jupyter
+pip install pyspark
+pip install findspark
+jupyter notebook --ip=*
+
+master 	Public IPs: 52.91.23.165      Private IPs: 172.31.23.228
+w1   Public IPs: 34.227.193.122      Private IPs: 172.31.16.142
+w2 - Public IPs: 18.206.169.245      Private IPs: 172.31.16.229
+w3 - Public IPs: 3.80.34.135      Private IPs: 172.31.24.107
+
+git clone https://github.com/siyad-CT/HPE_ML_WS
+
+Elephas Installation:
+On each master and worker outside virtualenv
+pip install elephas
+
+on master:
+sudo apt install openssh-server openssh-client
+cd ~/.ssh
+ssh-keygen -t rsa -P ""
+sudo service ssh restart
+cat id_rsa.pub
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDH6hoa3USLAMNBYdBIF6l52yJM5ZFNRsc6wLo3mLGMm7bYBevxdgBa7O2tAO7r9/VSlTjP8jd8DjQn6S86ZcTvI4iyp0jfnMRqOnBytjrTRHLNu7xw8ERcsYRObK7aq6d6q1xFDpgiO0JfqmWxWE8PRv2geKidmCRCwY6FEbwrtnRvqhiT59mGl1M9g6vjNbZHzpPDSVF0TQNMUo7dEPppA+brs+KVDDxho7YEeYk4v9FYNnFr7ftZMMAyz07+KvZMypwPpDaU6GbAPbMXHjU/jGjxiXt8wYzrUn11EELZfW79DtH/xYY18Cyo3lbAnIDj9Mn33hpRUkhzI/bWRFanQ5trtc8knEtptifVjTFJAZRgtOufrQHO2GELzaTQ+HuQIXbdZhIpPIPR6Jf5vl/GP3QU5hKMIAaEB1lW68ymBjO5cnV9p1RlANjoupRsC6dswvqDFqYB+7o8xPY2Hv8sCrqWLUkXGQfInMwQMZyuaZzYySJoomp1mLS6jB1QAC0= ubuntu@ip-172-31-23-228
+
+for each worker:
+cd ~/.ssh
+ls 
+nano authorisedkey
+paste key
+
+on master: (to taste connection)
+ssh -i ~/.ssh/id_rsa ubuntu@34.227.193.122
+exit
+ssh -i ~/.ssh/id_rsa ubuntu@18.206.169.245
+exit
+ssh -i ~/.ssh/id_rsa ubuntu@3.80.34.135
+exit
+
+on master:
+cd /opt/spark/conf/
+cp spark-env.sh.template spark-env.sh
+
+nano spark-env.sh
+export SPARK_MASTER_HOST=172.31.23.228
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+export PYSPARK_PYTHON=python3
+
+cp workers.template slaves
+nano slaves
+172.31.16.142
+172.31.16.229
+172.31.24.107
+
+
+cp spark-defaults.conf.template spark-defaults.conf
+nano spark-defaults.conf
+
+spark.driver.memory 5g
+spark.driver.maxResultSize 2g
+spark.executor.memory 5g
+
+sh /opt/spark/sbin/start-all.sh
+cd ~/my_ML_Projects/
+source ml_project_env/bin/activate
+jupyter notebook --ip=*
+git clone https://github.com/siyad-CT/HPE_ML_WS
+
+stop cluster from master:
+sh /opt/spark/sbin/stop-all.sh
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
