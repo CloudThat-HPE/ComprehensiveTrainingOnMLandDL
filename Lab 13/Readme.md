@@ -1,1 +1,1 @@
-Elephas Demonstration
+Lab 12 - Determined.ai

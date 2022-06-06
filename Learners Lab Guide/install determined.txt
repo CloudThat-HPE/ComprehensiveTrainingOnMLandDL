@@ -1,0 +1,46 @@
+Create new keypair
+Launch Instance to provision cluster
+Launch One instance with
+Name t2xlage
+connect with instance.
+sudo apt-get update
+sudo apt install -y python3-pip
+pip install determined
+close window and reconnect (if didnt work then restart instance)
+det deploy aws up --cluster-id amitdetcluster --keypair amitdetkeypair --region us-east-1 --master-instance-type t2.xlarge --aux-agent-instance-type t2.xlarge --compute-agent-instance-type t2.xlarge --max-dynamic-agents 3 
+
+or
+go to console
+create keypair
+cloud formation
+use template url
+https://hp-training-resources.s3.amazonaws.com/determined.yaml
+provide password postgress select keypair
+click next twice (ignoring warning/error)
+wait till stack created
+after create complete
+ec2 dashboard
+master runnning
+coonect
+
+sudo apt-get update
+sudo apt install python3-pip
+pip install determined
+sudo apt install git -y
+git clone https://github.com/determined-ai/determined.git
+
+cd determined/examples/computer_vision/cifar_tf_keras
+
+edit distributed.yaml
+
+nano distributed.yml
+slots per trial 2
+
+det experiment create distributed.yaml .
+
+open browser publicip:8080
+
+username admin
+no password 
+sign in
+
