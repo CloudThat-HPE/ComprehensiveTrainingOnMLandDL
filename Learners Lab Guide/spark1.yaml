@@ -1,0 +1,69 @@
+---
+- hosts: localhost
+  become: yes
+  tasks:
+  - name: "Update cache & Full system update"
+    apt:
+      update_cache: true
+      upgrade: yes
+
+  - name: "install required packages"
+    apt:
+      name: ['software-properties-common','pip']
+      state: present
+
+
+  - name: "install required python packages"
+    pip:
+      name: ['matplotlib','virtualenv']
+      state: present
+  - name: "install required java  packages"
+    apt:
+      name: ['openjdk-8-jdk','openjdk-8-jre']
+      state: present
+  - name: "setting up variables"
+    shell: cat >> /etc/environment <<EOL
+
+  - name: download spark 3.0.3
+    get_url:
+      url: https://downloads.apache.org/spark/spark-3.1.2/spark-3.1.2-bin-hadoop3.2.tgz
+      dest: /home/azureuser/
+
+  - name: make a directory
+    file:
+      path: /opt/spark
+      state: directory 
+      mode: 777 
+  - name:  extract files to directory
+    unarchive:
+      src: /home/azureuser/spark-3.1.2-bin-hadoop3.2.tgz
+      dest: /opt/spark
+      remote_src: yes
+  - name: "setup"
+    command: |
+      echo "export SPARK_HOME=/opt/spark" >> ~/.bashrc
+      echo "export PATH=$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin" >> ~/.bashrc
+      echo "export PYSPARK_PYTHON=/usr/bin/python3" >> ~/.bashrc
+      source ~/.bashrc
+
+
+  - name: "install jupyter"
+    apt:
+      name: ['python3-pip','python3-dev']
+      update_cache: yes
+      state: present
+
+  - name: make a directory
+    file:
+      path: /home/ubuntu/my_ML_Projects
+      state: directory
+    tags: dev1
+  - name: setup jupyter
+    become: yes
+    shell: |
+      virtualenv ml_project_env
+    args:
+      chdir: /home/ubuntu/my_ML_Projects
+    tags: dev
+
+
