@@ -15,7 +15,7 @@
 
   - name: "install required python packages"
     pip:
-      name: ['matplotlib','virtualenv']
+      name: ['virtualenv']
       state: present
   - name: "install required java  packages"
     apt:
@@ -27,7 +27,7 @@
   - name: download spark 3.0.3
     get_url:
       url: https://downloads.apache.org/spark/spark-3.1.2/spark-3.1.2-bin-hadoop3.2.tgz
-      dest: /home/azureuser/
+      dest: /home/ubuntu/
 
   - name: make a directory
     file:
@@ -36,7 +36,7 @@
       mode: 777 
   - name:  extract files to directory
     unarchive:
-      src: /home/azureuser/spark-3.1.2-bin-hadoop3.2.tgz
+      src: /home/ubuntu/spark-3.1.2-bin-hadoop3.2.tgz
       dest: /opt/spark
       remote_src: yes
   - name: "setup"
@@ -65,5 +65,8 @@
     args:
       chdir: /home/ubuntu/my_ML_Projects
     tags: dev
-
+  - name: "install required python packages"
+    pip:
+      name: ['pandas','numpy','matplotlib','seaborn','keras','tensorflow','pyspark',findspark]
+      state: present
 
