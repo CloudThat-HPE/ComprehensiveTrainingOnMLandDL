@@ -1,5 +1,0 @@
-sudo apt update
-git clone https://github.com/CloudThat-HPE/ComprehensiveTrainingOnMLandDL
-sudo apt install ansible
-ansible-playbook ComprehensiveTrainingOnMLandDL/Learners\ Lab\ Guide/spark1.yaml
-pip install elephas
